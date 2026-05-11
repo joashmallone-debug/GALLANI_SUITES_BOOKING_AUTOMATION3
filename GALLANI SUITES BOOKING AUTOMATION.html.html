@@ -1,0 +1,1086 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gallani Suites — Booking Automation 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --gold:#C9A84C;
+  --gold-light:#F0D98A;
+  --gold-pale:#FBF5E6;
+  --ink:#1A1410;
+  --ink-2:#3D2E1E;
+  --ink-3:#6B5744;
+  --sand:#F5EFE0;
+  --sand-2:#EDE4CE;
+  --sand-3:#D9CEBC;
+  --white:#FFFDF8;
+  --green:#2D6A4F;
+  --green-bg:#E8F5EF;
+  --red:#9B2226;
+  --red-bg:#FBE9E9;
+  --amber:#8B5E00;
+  --amber-bg:#FEF3DC;
+  --r:8px;
+  --r-lg:14px;
+  --shadow:0 2px 16px rgba(26,20,16,0.10);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'DM Sans',sans-serif;
+  background:var(--sand);
+  color:var(--ink);
+  font-size:14px;
+  line-height:1.6;
+  min-height:100vh;
+}
+
+/* TOP BAR */
+.topbar{
+  background:var(--ink);
+  color:var(--white);
+  padding:0 2rem;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  height:56px;
+  position:sticky;top:0;z-index:100;
+}
+.topbar-brand{
+  display:flex;align-items:center;gap:12px;
+}
+.topbar-logo{
+  width:32px;height:32px;
+  background:var(--gold);
+  border-radius:6px;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'DM Serif Display',serif;
+  font-size:16px;color:var(--ink);
+}
+.topbar-name{font-family:'DM Serif Display',serif;font-size:16px;letter-spacing:0.5px}
+.topbar-sub{font-size:11px;color:rgba(255,255,255,0.45);letter-spacing:1px;text-transform:uppercase}
+.topbar-date{font-family:'DM Mono',monospace;font-size:11px;color:rgba(255,255,255,0.45);letter-spacing:0.5px}
+
+/* LAYOUT */
+.layout{display:flex;min-height:calc(100vh - 56px)}
+.sidebar{
+  width:200px;flex-shrink:0;
+  background:var(--ink-2);
+  padding:1.5rem 0;
+  position:sticky;top:56px;
+  height:calc(100vh - 56px);
+  overflow-y:auto;
+}
+.nav-section{padding:0 1rem 0.5rem;font-size:10px;text-transform:uppercase;letter-spacing:1.5px;color:rgba(255,255,255,0.3);margin-top:1rem}
+.nav-section:first-child{margin-top:0}
+.nav-item{
+  display:flex;align-items:center;gap:10px;
+  padding:9px 1rem;
+  font-size:13px;color:rgba(255,255,255,0.6);
+  cursor:pointer;border:none;background:none;width:100%;text-align:left;
+  transition:all 0.15s;
+  border-left:3px solid transparent;
+}
+.nav-item:hover{background:rgba(255,255,255,0.05);color:rgba(255,255,255,0.9)}
+.nav-item.active{
+  background:rgba(201,168,76,0.12);
+  color:var(--gold-light);
+  border-left-color:var(--gold);
+}
+.nav-item svg{width:16px;height:16px;flex-shrink:0;opacity:0.7}
+.nav-item.active svg{opacity:1}
+
+/* MAIN */
+.main{flex:1;padding:2rem;max-width:1100px;overflow-x:hidden}
+
+/* PAGE HEADER */
+.page-header{margin-bottom:1.5rem}
+.page-header h1{
+  font-family:'DM Serif Display',serif;
+  font-size:26px;font-weight:400;
+  color:var(--ink);line-height:1.2;
+}
+.page-header p{color:var(--ink-3);font-size:13px;margin-top:4px}
+
+/* METRICS */
+.metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:2rem}
+.metric{
+  background:var(--white);
+  border:1px solid var(--sand-3);
+  border-radius:var(--r-lg);
+  padding:1.25rem;
+  position:relative;overflow:hidden;
+}
+.metric::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:3px;
+  background:var(--gold);
+}
+.metric-label{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--ink-3);margin-bottom:8px}
+.metric-val{font-family:'DM Serif Display',serif;font-size:24px;color:var(--ink);line-height:1}
+.metric-val.green{color:var(--green)}
+.metric-val.red{color:var(--red)}
+.metric-sub{font-size:11px;color:var(--ink-3);margin-top:5px}
+.progress-bar{height:4px;background:var(--sand-2);border-radius:2px;overflow:hidden;margin-top:8px}
+.progress-fill{height:100%;background:var(--green);border-radius:2px}
+
+/* PANELS */
+.panel{display:none}
+.panel.active{display:block}
+
+/* CARD */
+.card{
+  background:var(--white);
+  border:1px solid var(--sand-3);
+  border-radius:var(--r-lg);
+  padding:1.5rem;
+  margin-bottom:1.25rem;
+  box-shadow:var(--shadow);
+}
+.card-title{
+  font-family:'DM Serif Display',serif;
+  font-size:17px;font-weight:400;
+  display:flex;align-items:center;gap:8px;
+  margin-bottom:1.25rem;
+  padding-bottom:0.75rem;
+  border-bottom:1px solid var(--sand-2);
+  color:var(--ink);
+}
+.card-title svg{color:var(--gold);width:18px;height:18px}
+
+/* ALERT */
+.alert{
+  padding:12px 16px;border-radius:var(--r);
+  font-size:13px;margin-bottom:1.25rem;
+  display:flex;align-items:flex-start;gap:10px;
+  border:1px solid;
+}
+.alert-warn{background:var(--amber-bg);color:var(--amber);border-color:rgba(139,94,0,0.2)}
+.alert-info{background:#EFF6FF;color:#1e4d8c;border-color:rgba(30,77,140,0.2)}
+.alert-success{background:var(--green-bg);color:var(--green);border-color:rgba(45,106,79,0.2)}
+.alert svg{width:16px;height:16px;flex-shrink:0;margin-top:1px}
+
+/* FILTER ROW */
+.filter-row{display:flex;align-items:center;gap:10px;margin-bottom:1.25rem;flex-wrap:wrap}
+.search-input{
+  flex:1;min-width:180px;
+  padding:8px 12px;
+  border:1px solid var(--sand-3);
+  border-radius:var(--r);
+  background:var(--white);
+  color:var(--ink);
+  font-size:13px;
+  font-family:'DM Sans',sans-serif;
+  outline:none;
+}
+.search-input:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,168,76,0.1)}
+.chip-group{display:flex;gap:6px;flex-wrap:wrap}
+.chip{
+  padding:5px 12px;
+  border:1px solid var(--sand-3);
+  border-radius:20px;
+  font-size:12px;
+  cursor:pointer;
+  background:var(--white);
+  color:var(--ink-3);
+  font-family:'DM Sans',sans-serif;
+  transition:all 0.15s;
+}
+.chip:hover{border-color:var(--gold);color:var(--ink)}
+.chip.active{background:var(--ink);color:var(--white);border-color:var(--ink)}
+
+/* TABLE */
+.table-wrap{overflow-x:auto;border-radius:var(--r);border:1px solid var(--sand-2)}
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+thead{background:var(--sand)}
+th{
+  text-align:left;font-size:10px;
+  text-transform:uppercase;letter-spacing:0.8px;
+  color:var(--ink-3);font-weight:500;
+  padding:10px 12px;
+  border-bottom:1px solid var(--sand-3);
+}
+td{
+  padding:11px 12px;
+  border-bottom:1px solid var(--sand-2);
+  vertical-align:middle;
+}
+tbody tr:last-child td{border-bottom:none}
+tbody tr:hover td{background:var(--gold-pale)}
+.mono{font-family:'DM Mono',monospace;font-size:12px}
+.right{text-align:right}
+
+/* BADGES */
+.badge{
+  display:inline-block;padding:3px 9px;
+  border-radius:20px;font-size:10px;font-weight:500;
+  letter-spacing:0.3px;text-transform:uppercase;
+}
+.badge-confirmed{background:var(--green-bg);color:var(--green)}
+.badge-tentative{background:var(--amber-bg);color:var(--amber)}
+.badge-done{background:var(--green-bg);color:var(--green)}
+.badge-notdone{background:var(--red-bg);color:var(--red)}
+
+/* BUTTONS */
+.btn{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:8px 16px;border-radius:var(--r);
+  border:1px solid var(--sand-3);
+  background:var(--white);color:var(--ink);
+  font-size:13px;font-family:'DM Sans',sans-serif;
+  cursor:pointer;transition:all 0.15s;
+}
+.btn:hover{border-color:var(--gold);background:var(--gold-pale)}
+.btn:active{transform:scale(0.98)}
+.btn-primary{
+  background:var(--ink);color:var(--white);
+  border-color:var(--ink);
+}
+.btn-primary:hover{background:var(--ink-2);border-color:var(--ink-2);color:var(--white)}
+.btn-gold{
+  background:var(--gold);color:var(--ink);
+  border-color:var(--gold);font-weight:500;
+}
+.btn-gold:hover{background:var(--gold-light);border-color:var(--gold-light)}
+.btn-sm{padding:5px 10px;font-size:11px}
+.btn-group{display:flex;gap:8px;flex-wrap:wrap;margin-top:1rem}
+
+/* FORMS */
+.form-grid{display:grid;gap:12px;margin-bottom:12px}
+.form-grid-2{grid-template-columns:1fr 1fr}
+.form-grid-3{grid-template-columns:1fr 1fr 1fr}
+.form-group{display:flex;flex-direction:column;gap:5px}
+.form-group label{font-size:11px;text-transform:uppercase;letter-spacing:0.7px;color:var(--ink-3);font-weight:500}
+.form-group input,.form-group select,.form-group textarea{
+  padding:8px 12px;
+  border:1px solid var(--sand-3);
+  border-radius:var(--r);
+  background:var(--white);color:var(--ink);
+  font-size:13px;font-family:'DM Sans',sans-serif;
+  outline:none;transition:border-color 0.15s;
+}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{
+  border-color:var(--gold);
+  box-shadow:0 0 0 3px rgba(201,168,76,0.1);
+}
+.form-group textarea{resize:vertical;min-height:140px;line-height:1.6}
+.form-group input[readonly]{background:var(--sand);cursor:default}
+
+/* RECEIPT PREVIEW */
+.receipt{
+  border:1px solid var(--sand-3);
+  border-radius:var(--r-lg);
+  overflow:hidden;
+  margin-top:1rem;
+}
+.receipt-header{
+  background:var(--ink);color:var(--white);
+  padding:1.5rem;display:flex;justify-content:space-between;align-items:flex-start;
+}
+.receipt-title{font-family:'DM Serif Display',serif;font-size:22px;font-weight:400}
+.receipt-sub{font-size:11px;color:rgba(255,255,255,0.5);margin-top:3px}
+.receipt-body{padding:1.5rem;background:var(--white)}
+.receipt-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:1.25rem}
+.receipt-label{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--ink-3);margin-bottom:5px}
+.receipt-value{font-size:14px;font-weight:500;color:var(--ink)}
+.receipt-value-sm{font-size:12px;color:var(--ink-3);margin-top:2px}
+.receipt-footer{
+  background:var(--ink);color:var(--white);
+  padding:1rem 1.5rem;
+  display:flex;justify-content:space-between;align-items:center;
+}
+.receipt-footer-label{font-size:12px;text-transform:uppercase;letter-spacing:0.8px;color:rgba(255,255,255,0.6)}
+.receipt-footer-val{font-family:'DM Serif Display',serif;font-size:22px;color:var(--gold-light)}
+
+/* CALENDAR */
+.cal-header{
+  display:grid;grid-template-columns:repeat(7,1fr);
+  gap:3px;margin-bottom:3px;
+}
+.cal-day-name{text-align:center;font-size:10px;text-transform:uppercase;letter-spacing:0.8px;color:var(--ink-3);padding:4px}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px}
+.cal-day{
+  min-height:44px;border-radius:6px;
+  padding:5px;font-size:11px;
+  background:var(--sand);
+  display:flex;flex-direction:column;
+  position:relative;
+}
+.cal-day.booked-confirmed{background:var(--green-bg);border:1px solid rgba(45,106,79,0.2)}
+.cal-day.booked-tentative{background:var(--amber-bg);border:1px solid rgba(139,94,0,0.2)}
+.cal-day .cal-num{font-weight:500;color:var(--ink);font-size:12px}
+.cal-day.booked-confirmed .cal-num{color:var(--green)}
+.cal-day.booked-tentative .cal-num{color:var(--amber)}
+.cal-day .cal-guest{font-size:9px;color:var(--ink-3);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-top:2px}
+.cal-legend{display:flex;gap:16px;margin-top:10px;font-size:11px;color:var(--ink-3)}
+.cal-legend span{display:flex;align-items:center;gap:5px}
+.cal-legend-dot{width:10px;height:10px;border-radius:2px}
+
+/* INSIGHT CHIPS */
+.insight-chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:1.5rem}
+.insight-chip{
+  padding:8px 14px;border-radius:var(--r);
+  border:1px solid var(--sand-3);
+  background:var(--white);color:var(--ink);
+  font-size:12px;cursor:pointer;
+  font-family:'DM Sans',sans-serif;
+  transition:all 0.15s;text-align:left;
+  display:flex;align-items:center;gap:7px;
+}
+.insight-chip:hover{border-color:var(--gold);background:var(--gold-pale);color:var(--ink)}
+.insight-chip svg{color:var(--gold);flex-shrink:0;width:14px;height:14px}
+
+/* MONTH CHART */
+.month-bar{display:flex;align-items:center;gap:10px;margin-bottom:8px;font-size:12px}
+.month-bar-label{width:55px;color:var(--ink-3);flex-shrink:0;font-size:11px;text-transform:uppercase;letter-spacing:0.5px}
+.month-bar-track{flex:1;background:var(--sand-2);border-radius:3px;height:20px;position:relative;overflow:hidden;border-radius:3px}
+.month-bar-fill{height:100%;border-radius:3px;background:var(--sand-3);position:absolute;top:0;left:0}
+.month-bar-paid{height:100%;border-radius:3px;background:var(--green);position:absolute;top:0;left:0}
+.month-bar-meta{width:90px;text-align:right;flex-shrink:0;font-family:'DM Mono',monospace;font-size:11px;color:var(--ink-3)}
+.month-bar-count{width:60px;text-align:right;flex-shrink:0;font-size:11px;color:var(--ink-3)}
+
+/* WHATSAPP */
+.wa-btn{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:8px 16px;border-radius:var(--r);
+  background:#25D366;color:#fff;
+  border:none;font-size:13px;
+  font-family:'DM Sans',sans-serif;
+  cursor:pointer;transition:opacity 0.15s;
+}
+.wa-btn:hover{opacity:0.88}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  .sidebar{display:none}
+  .main{padding:1rem}
+  .form-grid-2,.form-grid-3{grid-template-columns:1fr}
+  .metrics{grid-template-columns:1fr 1fr}
+  .receipt-grid{grid-template-columns:1fr}
+}
+
+/* ROW COUNT */
+#row-count{font-size:11px;color:var(--ink-3);margin-top:8px}
+
+/* COPY SUCCESS */
+.copy-toast{
+  position:fixed;bottom:2rem;right:2rem;
+  background:var(--ink);color:var(--white);
+  padding:10px 18px;border-radius:var(--r);
+  font-size:13px;opacity:0;pointer-events:none;
+  transition:opacity 0.2s;z-index:999;
+}
+.copy-toast.show{opacity:1}
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<header class="topbar">
+  <div class="topbar-brand">
+    <div class="topbar-logo">G</div>
+    <div>
+      <div class="topbar-name">Gallani Suites</div>
+      <div class="topbar-sub">Event Hall Booking Automation</div>
+    </div>
+  </div>
+  <div class="topbar-date" id="live-date">12 May 2026</div>
+</header>
+
+<div class="layout">
+
+<!-- SIDEBAR -->
+<nav class="sidebar">
+  <p class="nav-section">Overview</p>
+  <button class="nav-item active" onclick="switchPanel('bookings',this)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+    Bookings
+  </button>
+
+  <p class="nav-section">Actions</p>
+  <button class="nav-item" onclick="switchPanel('add',this)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg>
+    Add Booking
+  </button>
+  <button class="nav-item" onclick="switchPanel('reminders',this)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+    Reminders
+  </button>
+  <button class="nav-item" onclick="switchPanel('receipts',this)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+    Receipts
+  </button>
+
+  <p class="nav-section">Analytics</p>
+  <button class="nav-item" onclick="switchPanel('analysis',this)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+    Insights
+  </button>
+</nav>
+
+<!-- MAIN CONTENT -->
+<main class="main">
+
+  <!-- METRICS -->
+  <div class="metrics">
+    <div class="metric">
+      <div class="metric-label">Active Bookings</div>
+      <div class="metric-val" id="m-active">4</div>
+      <div class="metric-sub">May 2026</div>
+    </div>
+    <div class="metric">
+      <div class="metric-label">Total Revenue</div>
+      <div class="metric-val" id="m-rev">₦10,000,000</div>
+      <div class="metric-sub">Hall rate value</div>
+    </div>
+    <div class="metric">
+      <div class="metric-label">Collected</div>
+      <div class="metric-val green" id="m-coll">₦1,880,000</div>
+      <div class="metric-sub">Payments received</div>
+    </div>
+    <div class="metric">
+      <div class="metric-label">Outstanding</div>
+      <div class="metric-val red" id="m-bal">₦8,120,000</div>
+      <div class="metric-sub">Balance due</div>
+    </div>
+    <div class="metric">
+      <div class="metric-label">Collection Rate</div>
+      <div class="metric-val" id="m-rate">18.8%</div>
+      <div class="progress-bar"><div class="progress-fill" id="m-progress" style="width:18.8%"></div></div>
+    </div>
+  </div>
+
+  <!-- ===== BOOKINGS ===== -->
+  <div id="panel-bookings" class="panel active">
+    <div class="page-header">
+      <h1>All Bookings</h1>
+      <p>Search, filter, and manage event hall reservations</p>
+    </div>
+
+    <div id="alert-box" class="alert alert-warn" style="display:none">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      <span id="alert-text"></span>
+    </div>
+
+    <div class="filter-row">
+      <input type="text" class="search-input" id="search-box" placeholder="Search guest, event, contact…" oninput="renderBookings()">
+      <div class="chip-group">
+        <button class="chip active" onclick="setFilter('all',this)">All</button>
+        <button class="chip" onclick="setFilter('confirmed',this)">Confirmed</button>
+        <button class="chip" onclick="setFilter('tentative',this)">Tentative</button>
+        <button class="chip" onclick="setFilter('balance',this)">Balance Due</button>
+      </div>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Date</th><th>Day</th><th>Guest</th><th>Event</th><th>Hall</th><th>Status</th>
+            <th class="right">Rate (₦)</th><th class="right">Paid (₦)</th><th class="right">Balance (₦)</th>
+            <th>Remarks</th><th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="booking-body"></tbody>
+      </table>
+    </div>
+    <p id="row-count"></p>
+  </div>
+
+  <!-- ===== ADD BOOKING ===== -->
+  <div id="panel-add" class="panel">
+    <div class="page-header">
+      <h1>New Booking</h1>
+      <p>Enter details to register a new hall reservation</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18M12 14v4M10 16h4"/></svg>
+        Booking Details
+      </div>
+
+      <div class="form-grid form-grid-3">
+        <div class="form-group">
+          <label>Month</label>
+          <select id="f-month">
+            <option>MAY</option><option>JUNE</option><option>JULY</option><option>AUGUST</option>
+            <option>SEPTEMBER</option><option>OCTOBER</option><option>NOVEMBER</option><option>DECEMBER</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Day</label><input type="number" id="f-day" min="1" max="31" placeholder="e.g. 23"></div>
+        <div class="form-group">
+          <label>Status</label>
+          <select id="f-status"><option>TENTATIVE</option><option>CONFIRMED</option></select>
+        </div>
+      </div>
+
+      <div class="form-grid form-grid-2">
+        <div class="form-group"><label>Booked By (Staff)</label><input type="text" id="f-bookedby" placeholder="e.g. TAYO"></div>
+        <div class="form-group"><label>Guest Name</label><input type="text" id="f-guest" placeholder="e.g. MR & MRS ADEYEMI"></div>
+      </div>
+
+      <div class="form-grid form-grid-2">
+        <div class="form-group"><label>Mobile</label><input type="tel" id="f-mobile" placeholder="08012345678"></div>
+        <div class="form-group"><label>Email</label><input type="email" id="f-email" placeholder="guest@email.com"></div>
+      </div>
+
+      <div class="form-grid form-grid-2">
+        <div class="form-group">
+          <label>Event Type</label>
+          <select id="f-event">
+            <option value="">-- Select --</option>
+            <option>WEDDING</option><option>BIRTHDAY</option><option>BURIAL</option>
+            <option>CORPORATE</option><option>NAMING CEREMONY</option><option>OTHER</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Hall Type</label>
+          <select id="f-hall"><option>ASHABI HALL</option><option>OTHER HALL</option></select>
+        </div>
+      </div>
+
+      <div class="form-grid form-grid-3">
+        <div class="form-group"><label>Hall Rate (₦)</label><input type="number" id="f-rate" value="2500000" oninput="calcBalance()"></div>
+        <div class="form-group"><label>Discount (₦)</label><input type="number" id="f-disc" value="0" oninput="calcBalance()"></div>
+        <div class="form-group"><label>Payment Received (₦)</label><input type="number" id="f-paid" value="0" oninput="calcBalance()"></div>
+      </div>
+
+      <div class="form-grid form-grid-3">
+        <div class="form-group">
+          <label>Payment Method</label>
+          <select id="f-method"><option>TRANS.</option><option>POS</option><option>CASH</option></select>
+        </div>
+        <div class="form-group">
+          <label>Remarks</label>
+          <select id="f-remarks"><option>NOT DONE</option><option>DONE</option></select>
+        </div>
+        <div class="form-group"><label>Balance (auto)</label><input type="text" id="f-balance" readonly></div>
+      </div>
+
+      <div class="btn-group">
+        <button class="btn btn-gold" onclick="addBooking()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+          Save Booking
+        </button>
+        <button class="btn" onclick="clearForm()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          Clear
+        </button>
+      </div>
+      <div id="add-msg" style="margin-top:10px"></div>
+    </div>
+  </div>
+
+  <!-- ===== REMINDERS ===== -->
+  <div id="panel-reminders" class="panel">
+    <div class="page-header">
+      <h1>Reminders</h1>
+      <p>Auto-generate and send guest messages via WhatsApp or SMS</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        Generate Reminder
+      </div>
+
+      <div class="form-grid form-grid-2" style="margin-bottom:12px">
+        <div class="form-group">
+          <label>Select Booking</label>
+          <select id="r-booking" onchange="previewReminder()">
+            <option value="">-- Choose booking --</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Message Type</label>
+          <select id="r-type" onchange="previewReminder()">
+            <option value="balance">Balance payment reminder</option>
+            <option value="confirm">Booking confirmation</option>
+            <option value="week">1-week countdown</option>
+            <option value="day">Day-before reminder</option>
+            <option value="thanks">Post-event thank you</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Message Preview (editable)</label>
+        <textarea id="r-preview" placeholder="Select a booking above to generate a message…"></textarea>
+      </div>
+
+      <div class="btn-group">
+        <button class="btn btn-primary" onclick="copyReminder()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          Copy Message
+        </button>
+        <button class="wa-btn" onclick="whatsappReminder()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
+          Open in WhatsApp
+        </button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+        Outstanding Balances — Quick Actions
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Guest</th><th>Date</th><th>Event</th><th>Mobile</th><th class="right">Balance (₦)</th><th>Action</th></tr></thead>
+          <tbody id="balance-body"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== RECEIPTS ===== -->
+  <div id="panel-receipts" class="panel">
+    <div class="page-header">
+      <h1>Receipts & Invoices</h1>
+      <p>Generate and share payment documents for any booking</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        Document Generator
+      </div>
+
+      <div class="form-grid form-grid-2">
+        <div class="form-group">
+          <label>Select Booking</label>
+          <select id="rec-booking" onchange="loadReceipt()">
+            <option value="">-- Choose booking --</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Document Type</label>
+          <select id="rec-type" onchange="loadReceipt()">
+            <option value="receipt">Payment receipt</option>
+            <option value="invoice">Outstanding invoice</option>
+            <option value="confirm">Booking confirmation</option>
+          </select>
+        </div>
+      </div>
+
+      <div id="receipt-preview" style="display:none">
+        <div class="receipt">
+          <div class="receipt-header">
+            <div>
+              <div class="receipt-title">GALLANI SUITES</div>
+              <div class="receipt-sub">Premium Event Hall — Lagos</div>
+            </div>
+            <div style="text-align:right">
+              <span class="badge badge-confirmed" id="rec-docbadge">RECEIPT</span>
+              <div style="font-size:11px;color:rgba(255,255,255,0.4);margin-top:6px" id="rec-ref">REF: GS-2026-001</div>
+              <div style="font-size:11px;color:rgba(255,255,255,0.4)" id="rec-issued">Issued: 12 May 2026</div>
+            </div>
+          </div>
+          <div class="receipt-body">
+            <div class="receipt-grid">
+              <div>
+                <div class="receipt-label">Billed To</div>
+                <div class="receipt-value" id="rec-guest"></div>
+                <div class="receipt-value-sm" id="rec-mobile"></div>
+              </div>
+              <div style="text-align:right">
+                <div class="receipt-label">Event Details</div>
+                <div class="receipt-value" id="rec-event"></div>
+                <div class="receipt-value-sm" id="rec-date"></div>
+                <div class="receipt-value-sm" id="rec-hall"></div>
+              </div>
+            </div>
+            <div class="table-wrap" style="margin-bottom:1rem">
+              <table>
+                <thead><tr><th>Description</th><th class="right">Amount (₦)</th></tr></thead>
+                <tbody id="rec-items"></tbody>
+              </table>
+            </div>
+          </div>
+          <div class="receipt-footer">
+            <div class="receipt-footer-label" id="rec-footer-label">Balance Due</div>
+            <div class="receipt-footer-val" id="rec-footer-val"></div>
+          </div>
+        </div>
+
+        <div class="btn-group">
+          <button class="btn btn-primary" onclick="copyReceiptText()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            Copy as Text
+          </button>
+          <button class="btn" onclick="window.print()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+            Print
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== INSIGHTS ===== -->
+  <div id="panel-analysis" class="panel">
+    <div class="page-header">
+      <h1>Insights & Analytics</h1>
+      <p>Revenue trends, calendar view, and business recommendations</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+        Revenue by Month — 2026
+      </div>
+      <div id="month-chart"></div>
+      <div style="display:flex;gap:16px;margin-top:10px;font-size:11px;color:var(--ink-3)">
+        <span style="display:flex;align-items:center;gap:5px"><span style="width:10px;height:10px;border-radius:2px;background:var(--sand-3);display:inline-block"></span> Total value</span>
+        <span style="display:flex;align-items:center;gap:5px"><span style="width:10px;height:10px;border-radius:2px;background:var(--green);display:inline-block"></span> Collected</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+        Booking Calendar — May 2026
+      </div>
+      <div class="cal-header" id="cal-header"></div>
+      <div class="cal-grid" id="cal-grid"></div>
+      <div class="cal-legend">
+        <span><span class="cal-legend-dot" style="background:var(--green-bg);border:1px solid rgba(45,106,79,0.2)"></span> Confirmed</span>
+        <span><span class="cal-legend-dot" style="background:var(--amber-bg);border:1px solid rgba(139,94,0,0.2)"></span> Tentative / Booked</span>
+        <span><span class="cal-legend-dot" style="background:var(--sand)"></span> Available</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+        Quick Action Prompts
+      </div>
+      <p style="font-size:12px;color:var(--ink-3);margin-bottom:1rem">Copy these prompts to get tailored recommendations from an AI assistant:</p>
+      <div class="insight-chips" id="insight-chips"></div>
+    </div>
+  </div>
+
+</main>
+</div>
+
+<!-- TOAST -->
+<div class="copy-toast" id="toast">✓ Copied to clipboard</div>
+
+<script>
+const PROMPTS=[
+  {label:'Payment collection strategies',text:'Gallani Suites 2026: May has 4 bookings worth ₦10M with only ₦1.88M collected (18.8%). Guests: BOLUWATIFE AYANKOYA (Wedding, May 23, ₦800k balance), TOMI ADEOYE (Wedding, May 30, ₦2.32M balance), MR WHITE (Birthday, May 16, ₦2.5M balance), POOL AFRICA (May 9, ₦2.5M balance). Give specific strategies to improve payment collection.'},
+  {label:'Fill the calendar',text:'Gallani Suites has 4 bookings in May 2026 and empty months June–December. Ashabi Hall rate is ₦2.5M. Suggest a marketing and pricing strategy to fill the calendar.'},
+  {label:'Upselling ideas',text:'Gallani Suites Event Hall: all confirmed bookings are for Ashabi Hall at ₦2,500,000. Events include weddings and birthdays. Suggest upselling strategies — packages, add-ons, or premium tiers to increase revenue per booking.'},
+  {label:'Weekday pricing strategy',text:'Gallani Suites: all 3 confirmed events are on Saturdays (16, 23, 30 May). Analyse weekend vs weekday demand and recommend a discounting or incentive strategy for weekdays to maximise occupancy.'},
+  {label:'Build a booking SOP',text:'Create a 5-step Standard Operating Procedure for Gallani Suites event hall — from initial inquiry to post-event follow-up, including payment milestones and communication touchpoints.'},
+  {label:'Draft follow-up for TOMI ADEOYE',text:'Write a professional WhatsApp follow-up for Gallani Suites to send to TOMI ADEOYE who has a ₦2,320,000 outstanding balance for a Wedding on May 30 2026. Be polite but firm.'}
+];
+
+let bookings=[
+  {id:1,month:'MAY',day:9,wk:'SAT',date:'Sat 9 May',status:'TENTATIVE',bookedby:'ABIGAIL',guest:'POOL AFRICA',mobile:'',email:'',event:'',hall:'ASHABI HALL',rate:2500000,discount:0,paid:0,balance:2500000,method:'TRANS.',remarks:'NOT DONE'},
+  {id:2,month:'MAY',day:16,wk:'SAT',date:'Sat 16 May',status:'TENTATIVE',bookedby:'TAYO',guest:'MR WHITE',mobile:'',email:'',event:'BIRTHDAY',hall:'ASHABI HALL',rate:2500000,discount:0,paid:0,balance:2500000,method:'TRANS.',remarks:'NOT DONE'},
+  {id:3,month:'MAY',day:23,wk:'SAT',date:'Sat 23 May',status:'CONFIRMED',bookedby:'TAYO',guest:'BOLUWATIFE AYANKOYA',mobile:'08026203936',email:'',event:'WEDDING',hall:'ASHABI HALL',rate:2500000,discount:0,paid:1700000,balance:800000,method:'TRANS.',remarks:'NOT DONE'},
+  {id:4,month:'MAY',day:30,wk:'SAT',date:'Sat 30 May',status:'CONFIRMED',bookedby:'TAYO',guest:'TOMI ADEOYE',mobile:'07040563202',email:'',event:'WEDDING',hall:'ASHABI HALL',rate:2500000,discount:0,paid:180000,balance:2320000,method:'TRANS.',remarks:'NOT DONE'}
+];
+let nextId=5;
+let filterMode='all';
+
+function fmt(n){return Number(n).toLocaleString('en-NG');}
+
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg||'✓ Copied!';
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2000);
+}
+
+function switchPanel(name, el){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById('panel-'+name).classList.add('active');
+  if(el)el.classList.add('active');
+  if(name==='analysis'){renderMonthChart();renderCal();renderInsightChips();}
+}
+
+function setFilter(f,el){
+  filterMode=f;
+  document.querySelectorAll('#panel-bookings .chip').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+  renderBookings();
+}
+
+function renderBookings(){
+  const q=(document.getElementById('search-box').value||'').toLowerCase();
+  let rows=bookings.filter(b=>{
+    if(filterMode==='confirmed')return b.status==='CONFIRMED';
+    if(filterMode==='tentative')return b.status==='TENTATIVE';
+    if(filterMode==='balance')return b.balance>0;
+    return true;
+  }).filter(b=>!q||(b.guest+b.event+b.mobile+b.bookedby).toLowerCase().includes(q));
+
+  document.getElementById('booking-body').innerHTML=rows.map(b=>`
+    <tr>
+      <td>${b.date}</td>
+      <td>${b.wk}</td>
+      <td><strong>${b.guest||'—'}</strong></td>
+      <td>${b.event||'—'}</td>
+      <td style="font-size:11px">${b.hall||'—'}</td>
+      <td><span class="badge ${b.status==='CONFIRMED'?'badge-confirmed':'badge-tentative'}">${b.status}</span></td>
+      <td class="mono right">${fmt(b.rate)}</td>
+      <td class="mono right" style="color:var(--green)">${fmt(b.paid)}</td>
+      <td class="mono right" style="color:${b.balance>0?'var(--red)':'inherit'}">${fmt(b.balance)}</td>
+      <td><span class="badge ${b.remarks==='DONE'?'badge-done':'badge-notdone'}">${b.remarks}</span></td>
+      <td>
+        <div style="display:flex;gap:4px">
+          <button class="btn btn-sm" onclick="quickReminder(${b.id})" title="Generate reminder">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/></svg>
+          </button>
+          <button class="btn btn-sm" onclick="deleteBooking(${b.id})" title="Delete">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/></svg>
+          </button>
+        </div>
+      </td>
+    </tr>`).join('');
+
+  document.getElementById('row-count').textContent=rows.length+' booking(s) shown';
+  renderAlerts();renderBalances();updateMetrics();populateDropdowns();
+}
+
+function renderAlerts(){
+  const overdue=bookings.filter(b=>b.balance>0);
+  const box=document.getElementById('alert-box');
+  const txt=document.getElementById('alert-text');
+  if(overdue.length){
+    box.style.display='flex';
+    txt.innerHTML='<strong>'+overdue.length+' booking(s)</strong> have outstanding balances totalling <strong>₦'+fmt(overdue.reduce((a,b)=>a+b.balance,0))+'</strong>. Use the Reminders tab to send follow-up messages.';
+  }else{box.style.display='none';}
+}
+
+function renderBalances(){
+  const due=bookings.filter(b=>b.balance>0);
+  document.getElementById('balance-body').innerHTML=due.length?due.map(b=>`
+    <tr>
+      <td><strong>${b.guest}</strong></td>
+      <td>${b.date}</td>
+      <td>${b.event||'—'}</td>
+      <td>${b.mobile||'—'}</td>
+      <td class="mono right" style="color:var(--red)">₦${fmt(b.balance)}</td>
+      <td><button class="btn btn-sm" onclick="quickReminder(${b.id})">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/></svg>
+        Remind</button></td>
+    </tr>`).join(''):'<tr><td colspan="6" style="color:var(--ink-3);text-align:center;padding:1.5rem">No outstanding balances.</td></tr>';
+}
+
+function updateMetrics(){
+  const total=bookings.reduce((a,b)=>a+b.rate,0);
+  const paid=bookings.reduce((a,b)=>a+b.paid,0);
+  const bal=bookings.reduce((a,b)=>a+b.balance,0);
+  const rate=total?((paid/total)*100).toFixed(1):0;
+  document.getElementById('m-active').textContent=bookings.length;
+  document.getElementById('m-rev').textContent='₦'+fmt(total);
+  document.getElementById('m-coll').textContent='₦'+fmt(paid);
+  document.getElementById('m-bal').textContent='₦'+fmt(bal);
+  document.getElementById('m-rate').textContent=rate+'%';
+  document.getElementById('m-progress').style.width=rate+'%';
+}
+
+function populateDropdowns(){
+  const opts=bookings.map(b=>`<option value="${b.id}">${b.guest} — ${b.date}</option>`).join('');
+  ['r-booking','rec-booking'].forEach(id=>{
+    const el=document.getElementById(id);
+    const val=el.value;
+    el.innerHTML='<option value="">-- Choose booking --</option>'+opts;
+    el.value=val;
+  });
+}
+
+function calcBalance(){
+  const rate=parseFloat(document.getElementById('f-rate').value)||0;
+  const disc=parseFloat(document.getElementById('f-disc').value)||0;
+  const paid=parseFloat(document.getElementById('f-paid').value)||0;
+  document.getElementById('f-balance').value='₦'+fmt(Math.max(0,rate-disc-paid));
+}
+
+function addBooking(){
+  const month=document.getElementById('f-month').value;
+  const day=parseInt(document.getElementById('f-day').value)||1;
+  const wkDays=['SUN','MON','TUE','WED','THU','FRI','SAT'];
+  const mNums={MAY:4,JUNE:5,JULY:6,AUGUST:7,SEPTEMBER:8,OCTOBER:9,NOVEMBER:10,DECEMBER:11};
+  const d=new Date(2026,mNums[month]||4,day);
+  const wk=wkDays[d.getDay()];
+  const rate=parseFloat(document.getElementById('f-rate').value)||0;
+  const disc=parseFloat(document.getElementById('f-disc').value)||0;
+  const paid=parseFloat(document.getElementById('f-paid').value)||0;
+  const guest=document.getElementById('f-guest').value.trim();
+  if(!guest){document.getElementById('add-msg').innerHTML='<div class="alert alert-warn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg> Please enter a guest name.</div>';return;}
+  const b={
+    id:nextId++,month,day,wk,
+    date:wk+' '+day+' '+month.charAt(0)+month.slice(1).toLowerCase(),
+    status:document.getElementById('f-status').value,
+    bookedby:document.getElementById('f-bookedby').value.toUpperCase(),
+    guest:guest.toUpperCase(),
+    mobile:document.getElementById('f-mobile').value,
+    email:document.getElementById('f-email').value,
+    event:document.getElementById('f-event').value,
+    hall:document.getElementById('f-hall').value,
+    rate,discount:disc,paid,balance:Math.max(0,rate-disc-paid),
+    method:document.getElementById('f-method').value,
+    remarks:document.getElementById('f-remarks').value
+  };
+  bookings.push(b);
+  renderBookings();
+  document.getElementById('add-msg').innerHTML='<div class="alert alert-success"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> Booking for '+b.guest+' saved successfully!</div>';
+  setTimeout(()=>document.getElementById('add-msg').innerHTML='',3500);
+}
+
+function clearForm(){
+  ['f-bookedby','f-guest','f-mobile','f-email','f-balance'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('f-day').value='';
+  document.getElementById('f-rate').value=2500000;
+  document.getElementById('f-disc').value=0;
+  document.getElementById('f-paid').value=0;
+}
+
+function deleteBooking(id){
+  if(!confirm('Delete this booking?'))return;
+  bookings=bookings.filter(b=>b.id!==id);
+  renderBookings();
+}
+
+function previewReminder(){
+  const id=parseInt(document.getElementById('r-booking').value);
+  const type=document.getElementById('r-type').value;
+  const ta=document.getElementById('r-preview');
+  if(!id){ta.value='';return;}
+  const b=bookings.find(x=>x.id===id);
+  if(!b)return;
+  const msgs={
+    balance:`Dear ${b.guest},\n\nGreetings from Gallani Suites!\n\nThis is a friendly reminder that your event (${b.event||'booking'}) is scheduled for ${b.date} at ${b.hall}.\n\nYour current outstanding balance is ₦${fmt(b.balance)}.\n\nKindly ensure full payment is made at least 7 days before your event to avoid any complications.\n\nFor payment or enquiries, please do not hesitate to contact us immediately.\n\nThank you for choosing Gallani Suites!\n\nWarm regards,\nGallani Suites Event Hall Management`,
+    confirm:`Dear ${b.guest},\n\nWe are pleased to confirm your booking at Gallani Suites Event Hall.\n\n— EVENT DETAILS —\nDate: ${b.date}\nHall: ${b.hall}\nEvent: ${b.event||'Your event'}\nHall Rate: ₦${fmt(b.rate)}${b.discount?'\nDiscount: ₦'+fmt(b.discount):''}\nAmount Paid: ₦${fmt(b.paid)}\nBalance Due: ₦${fmt(b.balance)}\n\nPlease keep this message as your booking reference.\n\nWe look forward to hosting your event and making it a memorable occasion!\n\nGallani Suites Event Hall`,
+    week:`Dear ${b.guest},\n\nJust 7 days to go! Your event is coming up on ${b.date} at Gallani Suites.\n\n${b.balance>0?'⚠️ IMPORTANT: You have an outstanding balance of ₦'+fmt(b.balance)+'. Kindly arrange payment before the event day.\n\n':'✅ Your account is fully settled — thank you!\n\n'}We are excited to host your ${b.event||'event'}. If you have any last-minute requests or questions, please reach us now so we can accommodate you.\n\nGallani Suites Event Hall`,
+    day:`Dear ${b.guest},\n\nTomorrow is the big day! Your ${b.event||'event'} at Gallani Suites is scheduled for ${b.date}.\n\nHall: ${b.hall}\n${b.balance>0?'\n⚠️ Outstanding balance: ₦'+fmt(b.balance)+' — please have this ready upon arrival.\n':''}\nPlease arrive on time to allow for setup coordination. Our team will be ready to welcome you and ensure everything runs smoothly.\n\nSee you tomorrow!\nGallani Suites Event Hall`,
+    thanks:`Dear ${b.guest},\n\nThank you so much for choosing Gallani Suites for your ${b.event||'event'}!\n\nIt was our absolute pleasure hosting you on ${b.date}. We hope your event was everything you envisioned — a truly memorable and joyful occasion.\n\nWe would love to welcome you again for future events. As a returning client, you'll enjoy priority booking and exclusive rates.\n\nWe'd also appreciate it if you could refer a friend or family member — your recommendation means the world to us.\n\nWith warm regards,\nGallani Suites Event Hall Management`
+  };
+  ta.value=msgs[type]||'';
+}
+
+function quickReminder(id){
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.querySelectorAll('.nav-item')[2].classList.add('active');
+  switchPanel('reminders',null);
+  document.getElementById('r-booking').value=id;
+  document.getElementById('r-type').value='balance';
+  previewReminder();
+}
+
+function copyReminder(){
+  const t=document.getElementById('r-preview').value;
+  if(!t)return;
+  navigator.clipboard.writeText(t).then(()=>showToast('✓ Message copied!'));
+}
+
+function whatsappReminder(){
+  const t=document.getElementById('r-preview').value;
+  const id=parseInt(document.getElementById('r-booking').value);
+  const b=bookings.find(x=>x.id===id);
+  const phone=b&&b.mobile?b.mobile.replace(/\D/g,'').replace(/^0/,'234'):'';
+  window.open('https://wa.me/'+phone+'?text='+encodeURIComponent(t),'_blank');
+}
+
+function loadReceipt(){
+  const id=parseInt(document.getElementById('rec-booking').value);
+  const type=document.getElementById('rec-type').value;
+  if(!id){document.getElementById('receipt-preview').style.display='none';return;}
+  const b=bookings.find(x=>x.id===id);
+  if(!b)return;
+  document.getElementById('receipt-preview').style.display='block';
+  document.getElementById('rec-guest').textContent=b.guest;
+  document.getElementById('rec-mobile').textContent=b.mobile||'Contact on file';
+  document.getElementById('rec-event').textContent=b.event||'Event Booking';
+  document.getElementById('rec-date').textContent=b.date;
+  document.getElementById('rec-hall').textContent=b.hall;
+  document.getElementById('rec-ref').textContent='REF: GS-2026-00'+b.id;
+  document.getElementById('rec-issued').textContent='Issued: 12 May 2026';
+  const labels={receipt:'RECEIPT',invoice:'INVOICE',confirm:'CONFIRMATION'};
+  document.getElementById('rec-docbadge').textContent=labels[type];
+  const items=`
+    <tr><td>Hall rental — ${b.hall}</td><td class="mono right">₦${fmt(b.rate)}</td></tr>
+    ${b.discount>0?`<tr><td>Discount applied</td><td class="mono right" style="color:var(--green)">-₦${fmt(b.discount)}</td></tr>`:''}
+    <tr><td>Amount paid via ${b.method}</td><td class="mono right" style="color:var(--green)">₦${fmt(b.paid)}</td></tr>`;
+  document.getElementById('rec-items').innerHTML=items;
+  const footerMap={
+    receipt:{label:'Total Paid',val:'₦'+fmt(b.paid)},
+    invoice:{label:'Balance Due',val:'₦'+fmt(b.balance)},
+    confirm:{label:'Booking Status',val:b.status}
+  };
+  document.getElementById('rec-footer-label').textContent=footerMap[type].label;
+  document.getElementById('rec-footer-val').textContent=footerMap[type].val;
+}
+
+function copyReceiptText(){
+  const id=parseInt(document.getElementById('rec-booking').value);
+  const b=bookings.find(x=>x.id===id);
+  if(!b)return;
+  const text=`GALLANI SUITES — PAYMENT RECEIPT\nRef: GS-2026-00${b.id} | Issued: 12 May 2026\n\nGuest: ${b.guest}\nMobile: ${b.mobile||'N/A'}\nEvent: ${b.event||'—'} | ${b.date} | ${b.hall}\n\nHall Rate:   ₦${fmt(b.rate)}\nAmount Paid: ₦${fmt(b.paid)}\nBalance Due: ₦${fmt(b.balance)}\nStatus:      ${b.status}\n\nThank you for choosing Gallani Suites.`;
+  navigator.clipboard.writeText(text).then(()=>showToast('✓ Receipt copied!'));
+}
+
+function renderMonthChart(){
+  const months=['MAY','JUNE','JULY','AUGUST','SEPTEMBER','OCTOBER','NOVEMBER','DECEMBER'];
+  const data=months.map(m=>({
+    m,
+    total:bookings.filter(b=>b.month===m).reduce((a,b)=>a+b.rate,0),
+    paid:bookings.filter(b=>b.month===m).reduce((a,b)=>a+b.paid,0),
+    count:bookings.filter(b=>b.month===m).length
+  }));
+  const max=Math.max(...data.map(d=>d.total),1);
+  document.getElementById('month-chart').innerHTML=data.map(d=>`
+    <div class="month-bar">
+      <div class="month-bar-label">${d.m.slice(0,3)}</div>
+      <div class="month-bar-track">
+        <div class="month-bar-fill" style="width:${(d.total/max*100).toFixed(1)}%"></div>
+        <div class="month-bar-paid" style="width:${(d.paid/max*100).toFixed(1)}%"></div>
+      </div>
+      <div class="month-bar-meta">${d.total?'₦'+fmt(d.total):'—'}</div>
+      <div class="month-bar-count">${d.count?d.count+' booking'+(d.count>1?'s':''):''}</div>
+    </div>`).join('');
+}
+
+function renderCal(){
+  const days=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  document.getElementById('cal-header').innerHTML=days.map(d=>`<div class="cal-day-name">${d}</div>`).join('');
+  const booked=bookings.filter(b=>b.month==='MAY').map(b=>({day:b.day,status:b.status,guest:b.guest}));
+  const firstDay=new Date(2026,4,1).getDay();
+  let html='';
+  for(let i=0;i<firstDay;i++)html+='<div></div>';
+  for(let day=1;day<=31;day++){
+    const b=booked.find(x=>x.day===day);
+    const cls=b?(b.status==='CONFIRMED'?'booked-confirmed':'booked-tentative'):'';
+    html+=`<div class="cal-day ${cls}"><div class="cal-num">${day}</div>${b?`<div class="cal-guest">${b.guest.split(' ')[0]}</div>`:''}</div>`;
+  }
+  document.getElementById('cal-grid').innerHTML=html;
+}
+
+function renderInsightChips(){
+  document.getElementById('insight-chips').innerHTML=PROMPTS.map(p=>`
+    <button class="insight-chip" onclick="navigator.clipboard.writeText(${JSON.stringify(p.text)}).then(()=>showToast('✓ Prompt copied — paste into your AI assistant'))">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+      ${p.label}
+    </button>`).join('');
+}
+
+// Live date
+document.getElementById('live-date').textContent=new Date().toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'});
+
+// Init
+renderBookings();
+calcBalance();
+</script>
+</body>
+</html>
